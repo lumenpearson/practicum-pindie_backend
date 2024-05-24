@@ -1,0 +1,11 @@
+# Ignore temporary files and directories
+.tmp
+
+# Ignore the directory with installed dependencies
+node_modules
+
+# Ignore the React configuration files
+.env
+
+# Ignore the log files
+*.log

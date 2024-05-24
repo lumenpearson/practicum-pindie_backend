@@ -1,0 +1,23 @@
+# Specify the default npm registry
+registry = “https://registry.npmjs.org/”
+
+# Save the exact versions of the dependencies. This ensures that the same dependency versions will be installed when reinstalling.
+save-exact = true
+
+# Use "production" mode, which excludes the installation of additional development files such as tests and documentation.
+production = true
+
+# Specify a directory to cache installed packages and their dependencies.
+store-dir = “node_modules/.pnpm”
+
+# Disable automatic update of dependency checksums during installation. This can speed up the installation process.
+update-checksums = false
+
+# Set the maximum number of concurrent requests when installing dependencies.
+fetch-concurrency = 5
+
+# Set the maximum number of concurrent processes when installing dependencies.
+install-concurrency = 3
+
+# Enable "silent mode", which suppresses "unnecessary" messages during installation.
+silent = true

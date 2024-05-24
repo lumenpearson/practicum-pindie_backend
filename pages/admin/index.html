@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="theme-color" content="#a17fe0" />
+    <meta name="color-scheme" content="light" />
+    <title>Pindie :: Admin-Panel</title>
+    
+    <meta name="format-detection" content="address=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    
+    <meta name="google" content="notranslate" />
+    <meta content="IE=Edge" httpEquiv="X-UA-Compatible" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover shrink-to-fit=no user-scalable=no"
+    />
+    
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_EN" />
+    <meta property="og:site_name" content="Pindie" />
+    <meta property="og:title" content="Pindie" />
+    <meta property="og:description" content="Portal of indie games from Yandex Practicum students." />
+    
+    <meta name="twitter:title" content="Pindie" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:description" content="Portal of indie games from Yandex Practicum students. " />
+    
+    <meta name="description" content="Portal of indie games from Yandex Practicum students. " />
+    <meta
+      name="keywords"
+      content="Pindie, games, indie-games, game studio, yandex, practicum, yandex practicum"
+    />
+    <meta name="copyright" content="GITHUB.COM/LUMENPEARSON" />
+    <meta name="robots" content="index, follow" />
+    <link rel="stylesheet" href="/admin/styles/styles.css" />
+    <link rel="canonical" href="/" />
+  </head>
+  <body>
+    <button class="button instance-button logout-button">Quit</button>
+    <section>
+      <h2 class="section-title">
+        <span>Games</span>
+        <button class="button instance-button add-game-button call-dialog-button">
+          Add
+        </button>
+      </h2>
+      <ul class="games-list"></ul>
+    </section>
+    <section>
+      <h2 class="section-title">
+        <span>Categories</span>
+        <button class="button instance-button add-category-button call-dialog-button">
+          Add
+        </button>
+      </h2>
+      <ul class="categories-list"></ul>
+    </section>
+    <section>
+      <h2 class="section-title">
+        <span>Users</span>
+        <button class="button instance-button add-user-button call-dialog-button">
+          Add
+        </button>
+      </h2>
+      <ul class="users-list"></ul>
+    </section>
+    
+    <dialog class="form-dialog" id="form-dialog">
+      <button class="close-dialog-button">Cancel</button>
+      <div class="form-container"></div>
+    </dialog>
+    
+    <dialog class="tooltip"></dialog>
+    
+    <template id="game-list-item">
+      <li class="game-list-item">
+        <article class="game-card">
+          <button class="button instance-button close-item">Cancel</button>
+          <div>
+            <img src="" alt="" />
+            <div class="game-controls">
+              <input
+                type="url"
+                class="textfield image-url-input"
+                placeholder="Link to preview"
+              />
+              <button class="button instance-button edit-game-button">
+                Edit
+              </button>
+              <button class="button instance-button delete-game-button">
+                Delete
+              </button>
+            </div>
+          </div>
+          
+          <div class="description">
+            <h3></h3>
+            <p class="bold-text">Description:</p>
+            <p class="text"></p>
+            <p class="bold-text">Developer:</p>
+            <p class="developer"></p>
+            <p class="link">
+              <span class="bold-text">Link:</span>
+              <a href="" target="_blank"></a>
+            </p>
+            <p class="category bold-text">Categories:</p>
+            <ul class="categories"></ul>
+            <p class="users bold-text">Voted:</p>
+            <ul class="votes"></ul>
+          </div>
+        </article>
+      </li>
+    </template>
+    
+    <template id="category-list-item">
+      <li class="category-list-item">
+        <button class="close-item button instance-button">Cancel</button>
+        <div>
+          <p class="name"></p>
+          <button class="button icon-button edit-category-button edit-button">
+            <span class="visually-hidden">Edit</span>
+            <svg>
+              <use href="/admin/svg/icons.svg#edit"></use>
+            </svg>
+          </button>
+          <button class="button icon-button delete-category-button">
+            <span class="visually-hidden">Delete</span>
+            <svg>
+              <use href="/admin/svg/icons.svg#delete"></use>
+            </svg>
+          </button>
+        </div>
+      </li>
+    </template>
+    
+    <template id="user-list-item">
+      <li class="user-list-item">
+        <button class="close-item button instance-button">Cancel</button>
+        <div>
+          <p class="name"></p>
+          <p class="email"></p>
+          <button class="button icon-button edit-user-button edit-button">
+            <span class="visually-hidden">Edit</span>
+            <svg>
+              <use href="/admin/svg/icons.svg#edit"></use>
+            </svg>
+          </button>
+          <button class="button icon-button delete-user-button">
+            <span class="visually-hidden">Delete</span>
+            <svg>
+              <use href="/admin/svg/icons.svg#delete"></use>
+            </svg>
+          </button>
+        </div>
+      </li>
+    </template>
+    
+    <template id="categories-checkbox">
+      <label>
+        <input type="checkbox" name="game-category" value="" />
+        <span></span>
+      </label>
+    </template>
+    
+    <!-- Form templates -->
+    
+    <template class="add-game-form">
+      <form class="form form--game">
+        <label class="form-label">
+          <span class="form-label-text">Name</span>
+          <input type="text" name="title" class="textfield" />
+        </label>
+        <label class="form-label">
+          <span class="form-label-text">Description</span>
+          <textarea
+            name="description"
+            cols="30"
+            rows="10"
+            class="textarea"
+          ></textarea>
+        </label>
+        <label class="form-label">
+          <span class="form-label-text">Developer</span>
+          <input type="text" name="developer" class="textfield" />
+        </label>
+        <label class="form-label">
+          <span class="form-label-text">Preview image</span>
+          <input type="url" name="image" class="textfield" />
+        </label>
+        <label class="form-label">
+          <span class="form-label-text">Link to game</span>
+          <input type="url" name="link" class="textfield" />
+        </label>
+        <div class="categories-fields">
+          <h3>Categories</h3>
+        </div>
+        <button type="submit" class="button instance-button">
+          Add
+        </button>
+      </form>
+    </template>
+    <template class="add-category-form">
+      <form class="form form--category">
+        <label class="form-label">
+          <span class="form-label">Name</span>
+          <input type="text" name="name" class="textfield" />
+        </label>
+        <button type="submit" class="button instance-button">
+          Add
+        </button>
+      </form>
+    </template>
+    <template class="add-user-form">
+      <form class="form form--user">
+        <label class="form-label">
+          <span class="form-label">Username</span>
+          <input type="text" name="username" class="textfield" />
+        </label>
+        <label class="form-label">
+          <span class="form-label">E-mail</span>
+          <input type="email" name="email" class="textfield" />
+        </label>
+        <label class="form-label">
+          <span class="form-label">Password</span>
+          <input type="password" name="password" class="textfield" />
+        </label>
+        <button type="submit" class="button instance-button">
+          Add user
+        </button>
+      </form>
+    </template>
+    
+    <script src="/admin/scripts/script.js" type="module"></script>
+    <script src="/admin/scripts/dialogs-controller.js" type="module"></script>
+    <script src="/admin/scripts/login.js" type="module"></script>
+  </body>
+</html>

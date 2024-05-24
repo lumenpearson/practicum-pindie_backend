@@ -1,0 +1,45 @@
+{
+  "name": "practicum-pindie_backend",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "dev": "cross-env nodemon index.js | bunyan",
+    "start": "cross-env pm2 describe pindie_backend > NUL && pm2 stop pindie_backend && pm2 delete pindie_backend || true && pm2 start index.js --name pindie_backend | bunyan",
+    "stop": "cross-env pm2 describe pindie_backend > NUL && pm2 stop pindie_backend && pm2 delete pindie_backend || true",
+    "format": "prettier --write .",
+    "lint": "eslint ."
+  },
+  "license": "MIT",
+  "author": "LumenPearson <lumenpearson@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lumenpearson/practicum-pindie_backend.git"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "bunyan": "^1.8.15",
+    "chalk": "^5.3.0",
+    "cookie-parser": "^1.4.6",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-requests-logger": "^4.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.0",
+    "pm2": "^5.3.1",
+    "process": "^0.11.10"
+  },
+  "devDependencies": {
+    "@eslint/js": "^8.57.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-security": "^3.0.0",
+    "globals": "^15.3.0",
+    "nodemon": "^3.1.0",
+    "prettier": "^3.2.5"
+  }
+}
