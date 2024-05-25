@@ -1,10 +1,9 @@
+import { appendGameForm, appendCategoryForm, appendUserForm } from "./forms.js";
 import {
   removeCategoryFormListeners,
   removeUserFormListeners,
   removeGameFormListeners,
 } from "./requests.js";
-import { appendGameForm, appendCategoryForm, appendUserForm } from "./forms.js";
-
 const buttons = [...document.querySelectorAll(".call-dialog-button")];
 const dialog = document.querySelector(".form-dialog");
 const closeButton = dialog?.querySelector(".close-dialog-button");
@@ -39,7 +38,7 @@ const formSwitch = (caseName) => {
       appendUserForm();
       break;
     default:
-      console.log("Unknown case.");
+      console.log("Unknown case");
   }
 };
 

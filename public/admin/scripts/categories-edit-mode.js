@@ -1,20 +1,18 @@
-import {
-  addPutCategoryListeners,
-  removePutCategoryListeners,
-} from "./requests.js";
+import { addPutCategoryListeners, removePutCategoryListeners } from "./requests.js";
 
-export const currentCategoryState = { name: "" };
+export const currentCategoryState = {
+  name: "",
+};
+
 export let categoriesEditModeOn = false;
 
 const useCategoryState = () => {
   function setCurrentCategoryState(key, value) {
     currentCategoryState[key] = value;
   }
-
   function setCategoriesEditModeOn(state) {
     categoriesEditModeOn = state;
   }
-
   return { setCurrentCategoryState, setCategoriesEditModeOn };
 };
 
@@ -63,7 +61,6 @@ const changeTargetElementsStyle = (targetElementsState, state) => {
 
 const blurElements = (categoryId, state) => {
   const categoriesCards = [...document.querySelectorAll(".category-list-item")];
-
   if (state) {
     categoriesCards.forEach((card) => {
       if (card.id !== `category-${categoryId}`) {
@@ -100,11 +97,9 @@ const setButtonStyle = (categoryId, state) => {
     document.querySelector(
       `#category-${categoryId} .edit-category-button svg use`
     ).href.baseVal = "/svg/icons.svg#save";
-
     document.querySelector(
       `#category-${categoryId} .edit-category-button .visually-hidden`
-    ).textContent = "Save";
-
+    ).textContent = "Сохранить";
     document.querySelector(
       `#category-${categoryId} .edit-category-button svg`
     ).style.stroke = "lightgreen";
@@ -112,11 +107,9 @@ const setButtonStyle = (categoryId, state) => {
     document.querySelector(
       `#category-${categoryId} .edit-category-button svg use`
     ).href.baseVal = "/svg/icons.svg#edit";
-
     document.querySelector(
       `#category-${categoryId} .edit-category-button .visually-hidden`
-    ).textContent = "Edit";
-
+    ).textContent = "Редактировать";
     document
       .querySelector(`#category-${categoryId} .edit-category-button svg`)
       .removeAttribute("style");
@@ -127,18 +120,15 @@ const setCloseButtonStyleAndListeners = (categoryId, state) => {
   if (state) {
     const handleCloseButtonClick = () => {
       changeCategoryEditMode(categoryId, false);
-
       document
         .querySelector(`#category-${categoryId} .close-item`)
         .removeEventListener("click", handleCloseButtonClick);
-
       removePutCategoryListeners();
       addCategoriesEditModeListeners();
     };
     document.querySelector(
       `#category-${categoryId} .close-item`
     ).style.display = "block";
-
     document
       .querySelector(`#category-${categoryId} .close-item`)
       .addEventListener("click", handleCloseButtonClick);
@@ -170,18 +160,14 @@ export const changeCategoryEditMode = (categoryId, state) => {
 
 function handleButtonClick(event) {
   const categoryId = event.currentTarget.dataset.id;
-
   fillCategoriesStateFromPage(categoryId);
   changeCategoryEditMode(categoryId, true);
-
   const categoryButtons = [
     ...document.querySelectorAll(".edit-category-button"),
   ];
-
   categoryButtons.forEach((button) => {
     button.removeEventListener("click", handleButtonClick);
   });
-
   addPutCategoryListeners();
 }
 

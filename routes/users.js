@@ -1,6 +1,5 @@
 const usersRouter = require("express").Router();
 const { Authorize, checkAdmin } = require("../middlewares/auth.js");
-
 const {
   createUser,
   findAllUsers,
@@ -35,16 +34,8 @@ usersRouter.post(
   createUser,
   sendUserCreated
 );
-usersRouter.get(
-  "/users",
-  findAllUsers,
-  sendAllUsers
-);
-usersRouter.get(
-  "/users/:id",
-  findUserById,
-  sendUserById
-);
+usersRouter.get("/users", findAllUsers, sendAllUsers);
+usersRouter.get("/users/:id", findUserById, sendUserById);
 usersRouter.put(
   "/users/:id",
   Authorize,

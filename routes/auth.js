@@ -1,7 +1,6 @@
 const authRouter = require("express").Router();
 const { Authorize } = require("../middlewares/auth.js");
 const { login, signup, sendMe } = require("../controllers/auth.js");
-
 const {
   findAllUsers,
   hashPassword,

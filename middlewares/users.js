@@ -1,18 +1,5 @@
 const bcrypt = require("bcryptjs");
 const users = require("../models/user");
-const {
-  ERR_USER_CREATE,
-  ERR_USER_NOT_FOUND,
-  ERR_USER_UPDATE,
-  ERR_USER_DELETE,
-  ERR_PASSWORD_HASH,
-  ERR_EMPTY_NAME_EMAIL_PASS,
-  ERR_EMPTY_NAME_EMAIL,
-  ERR_INVALID_NAME,
-  ERR_INVALID_EMAIL,
-  ERR_USER_EXISTS_NAME,
-  ERR_USER_EXISTS_EMAIL,
-} = require("@/config");
 
 const createUser = async (req, res, next) => {
   try {
@@ -22,13 +9,12 @@ const createUser = async (req, res, next) => {
     res.setHeader("Content-Type", "application/json");
     res
       .status(400)
-      .send(JSON.stringify({ message: ERR_USER_CREATE }));
+      .send(JSON.stringify({ message: "Ошибка создания пользователя" }));
   }
 };
 
 const findAllUsers = async (req, res, next) => {
   req.usersArray = await users.find({}, { password: 0 });
-  
   next();
 };
 
@@ -38,7 +24,7 @@ const findUserById = async (req, res, next) => {
     next();
   } catch {
     res.setHeader("Content-Type", "application/json");
-    res.status(404).send(JSON.stringify({ message: ERR_USER_NOT_FOUND }));
+    res.status(404).send(JSON.stringify({ message: "Пользователь не найден" }));
   }
 };
 
@@ -49,7 +35,7 @@ const updateUser = async (req, res, next) => {
   } catch (error) {
     res
       .status(400)
-      .send({ message: `${ERR_USER_UPDATE}\n${error}` });
+      .send({ message: `Ошибка обновления пользователя: ${error}` });
   }
 };
 
@@ -61,7 +47,7 @@ const deleteUser = async (req, res, next) => {
     res.setHeader("Content-Type", "application/json");
     res
       .status(400)
-      .send(JSON.stringify({ message: ERR_USER_DELETE }));
+      .send(JSON.stringify({ message: "Ошибка удаления пользователя" }));
   }
 };
 
@@ -71,7 +57,7 @@ const hashPassword = async (req, res, next) => {
     req.body.password = await bcrypt.hash(req.body.password, salt);
     next();
   } catch {
-    res.status(400).send({ message: ERR_PASSWORD_HASH });
+    res.status(400).send({ message: "Ошибка хеширования пароля" });
   }
 };
 
@@ -80,7 +66,7 @@ const checkEmptyNameAndEmailAndPassword = async (req, res, next) => {
     res.setHeader("Content-Type", "application/json");
     res
       .status(400)
-      .send(JSON.stringify({ message: ERR_EMPTY_NAME_EMAIL_PASS }));
+      .send(JSON.stringify({ message: "Введите имя, email и пароль" }));
   } else {
     next();
   }
@@ -89,7 +75,7 @@ const checkEmptyNameAndEmailAndPassword = async (req, res, next) => {
 const checkEmptyNameAndEmail = async (req, res, next) => {
   if (!req.body.username || !req.body.email) {
     res.setHeader("Content-Type", "application/json");
-    res.status(400).send(JSON.stringify({ message: ERR_EMPTY_NAME_EMAIL }));
+    res.status(400).send(JSON.stringify({ message: "Введите имя и email" }));
   } else {
     next();
   }
@@ -101,7 +87,7 @@ const validateUsername = async (req, res, next) => {
     res.setHeader("Content-Type", "application/json");
     res
       .status(400)
-      .send(JSON.stringify({ message: ERR_INVALID_NAME }));
+      .send(JSON.stringify({ message: "Неправильный формат имени" }));
   } else {
     next();
   }
@@ -113,7 +99,7 @@ const validateEmail = async (req, res, next) => {
     res.setHeader("Content-Type", "application/json");
     res
       .status(400)
-      .send(JSON.stringify({ message: ERR_INVALID_EMAIL }));
+      .send(JSON.stringify({ message: "Неправильный формат email" }));
   } else {
     next();
   }
@@ -126,26 +112,24 @@ const checkIsUserExists = async (req, res, next) => {
       user._id.toString() !== req.params.id
     );
   });
-  
   const isEmailInArray = req.usersArray.find((user) => {
     return (
       req.body.email === user.email && user._id.toString() !== req.params.id
     );
   });
-  
   if (isUsernameInArray) {
     res.setHeader("Content-Type", "application/json");
     res.status(400).send(
       JSON.stringify({
-        message: ERR_USER_EXISTS_NAME,
-      }),
+        message: "Пользователь с таким именем уже существует",
+      })
     );
   } else if (isEmailInArray) {
     res.setHeader("Content-Type", "application/json");
     res.status(400).send(
       JSON.stringify({
-        message: ERR_USER_EXISTS_EMAIL,
-      }),
+        message: "Пользователь с таким email уже существует",
+      })
     );
   } else {
     next();

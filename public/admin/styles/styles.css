@@ -1,12 +1,12 @@
 @font-face {
   font-family: "Inter";
-  src: url(/fonts/inter-family/Inter-Regular.woff) format("woff");
+  src: url(../fonts/Inter-Regular.woff) format("woff");
   font-weight: normal;
 }
 
 @font-face {
   font-family: "Inter";
-  src: url(/fonts/inter-family/Inter-Bold.woff) format("woff");
+  src: url(../fonts/Inter-Bold.woff) format("woff");
   font-weight: bold;
 }
 
@@ -82,11 +82,11 @@ input {
   position: fixed;
   top: 1em;
   right: 1em;
-  display: none;
   padding: 0.5em;
-  color: #fff;
-  background-color: tomato;
   border-radius: 0.5em;
+  background-color: tomato;
+  color: #fff;
+  display: none;
   z-index: calc(infinity);
 }
 
@@ -328,7 +328,6 @@ button {
   .games-list li article {
     grid-template-columns: 1fr;
   }
-
   .users-list li div {
     grid-template-columns: min-content 1fr;
   }

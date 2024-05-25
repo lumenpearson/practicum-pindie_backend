@@ -1,60 +1,29 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="ru">
   <head>
-    <meta charset="utf-8" />
-    <meta name="theme-color" content="#a17fe0" />
-    <meta name="color-scheme" content="light" />
-    <title>Login | Pindie :: Admin-Panel</title>
-    
-    <meta name="format-detection" content="address=no" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="msapplication-tap-highlight" content="no" />
-    
-    <meta name="google" content="notranslate" />
-    <meta content="IE=Edge" httpEquiv="X-UA-Compatible" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover shrink-to-fit=no user-scalable=no"
-    />
-    
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="en_EN" />
-    <meta property="og:site_name" content="Pindie" />
-    <meta property="og:title" content="Pindie" />
-    <meta property="og:description" content="Portal of indie games from Yandex Practicum students. " />
-    
-    <meta name="twitter:title" content="Pindie" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:description" content="Portal of indie games from Yandex Practicum students. " />
-    
-    <meta name="description" content="Portal of indie games from Yandex Practicum students. " />
-    <meta
-      name="keywords"
-      content="Pindie, games, indie-games, game studio, yandex, practicum, yandex practicum"
-    />
-    <meta name="copyright" content="GITHUB.COM/LUMENPEARSON" />
-    <meta name="robots" content="index, follow" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pindie</title>
     <link rel="stylesheet" href="/admin/styles/styles.css" />
-    <link rel="canonical" href="/" />
   </head>
   <body>
-  <section>
-    <form class="auth-form">
-      <h1>Pindie Admin-Panel</h1>
-      <label>
-        <span>E-mail</span>
-        <input type="email" name="email" class="textfield" />
-      </label>
-      <label>
-        <span>Password</span>
-        <input type="password" name="password" class="textfield" />
-      </label>
-      <button type="submit" class="button instance-button auth-submit-button">
-        Login
-      </button>
-    </form>
-  </section>
-  <dialog class="tooltip"></dialog>
-  <script src="/admin/scripts/login.js" type="module"></script>
+    <section>
+      <form class="auth-form">
+        <h1>Администрирование Pindie</h1>
+        <label>
+          <span>E-mail</span>
+          <input type="email" name="email" class="textfield" />
+        </label>
+        <label>
+          <span>Пароль</span>
+          <input type="password" name="password" class="textfield" />
+        </label>
+        <button type="submit" class="button instance-button auth-submit-button">
+          Войти
+        </button>
+      </form>
+    </section>
+    <dialog class="tooltip"></dialog>
+    <script src="/admin/scripts/login.js" type="module"></script>
   </body>
 </html>

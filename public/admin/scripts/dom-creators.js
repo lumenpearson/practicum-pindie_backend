@@ -11,7 +11,7 @@ const appendGameCategoriesList = (categoriesArray, parent) => {
 
 const generateGamesList = (gamesArray, template, parent) => {
   if (gamesArray.length <= 0) {
-    parent.textContent = "No available games, add a new game.";
+    parent.textContent = "Пока игр нет, добавьте новую игру.";
     return;
   }
   gamesArray.forEach((element) => {
@@ -52,7 +52,8 @@ const renderGames = (gamesArray) => {
 
 const generateUsersList = (usersArray, template, parent) => {
   if (usersArray.length <= 0) {
-    parent.textContent = "No available users, add a new user...";
+    parent.textContent =
+      "Пока пользователей нет, добавьте нового пользователя.";
     return;
   }
   usersArray.forEach((element) => {
@@ -74,7 +75,7 @@ const renderUsersList = (usersArray) => {
 
 const generateCategoriesList = (categoriesArray, template, parent) => {
   if (categoriesArray.length <= 0) {
-    parent.textContent = "No available categories, add a new category.";
+    parent.textContent = "Пока категорий нет, добавьте новую категорию.";
     return;
   }
   categoriesArray.forEach((element) => {
@@ -94,19 +95,18 @@ const renderCategoriesList = (categoriesArray) => {
 };
 
 const createGameCategoriesForm = (gameId, categoriesState, currentState) => {
+  // Создаём форму для редактирования категорий
   const form = document.createElement("form");
-
   form.className = "game-categories-form";
   document.querySelector(`#game-${gameId} .category`).after(form);
   appendCategoryEditModeForm(categoriesState, form);
-
+  //расставляем checked
   let targetCategories = categoriesState.filter((item) =>
     currentState.categories.includes(item._id)
   );
   const checkboxes = [
     ...document.querySelectorAll(`#game-${gameId} .game-categories-form input`),
   ];
-
   checkboxes.forEach((checkbox) => {
     if (targetCategories.find((category) => category._id === checkbox.value)) {
       checkbox.checked = true;

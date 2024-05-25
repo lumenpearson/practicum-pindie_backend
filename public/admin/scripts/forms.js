@@ -4,21 +4,22 @@ const createGameForm = () => {
   const template = document.querySelector(".add-game-form");
   const clone = template.content.cloneNode(true);
   const parent = clone.querySelector(".categories-fields");
+  
   categoriesState.forEach((category) => {
     const label = document.createElement("label");
     label.className = "form-label";
-
+    
     const span = document.createElement("span");
     span.textContent = category.name;
     span.className = "form-label-text";
     label.append(span);
-
+    
     const input = document.createElement("input");
     input.type = "checkbox";
     input.name = "categories";
     input.className = "checkbox";
     input.value = category._id;
-
+    
     label.append(input);
     parent.append(label);
   });

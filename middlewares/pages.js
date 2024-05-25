@@ -1,10 +1,12 @@
 const jwt = require("jsonwebtoken");
 const users = require("../models/user");
-const { SECRET_KEY, LOGIN_PATH } = require("@/config");
+const { SECRET_KEY, LOGIN_PATH } = require("../config");
 
 const AuthorizePages = async (req, res, next) => {
-  let token;
   const onLoginPage = req.path === LOGIN_PATH;
+
+  let token;
+
   const { authorization } = req.headers;
 
   if (authorization && authorization.startsWith("Bearer ")) {
@@ -12,6 +14,7 @@ const AuthorizePages = async (req, res, next) => {
   } else {
     token = req.cookies.jwt;
   }
+
   if (!token) {
     if (!onLoginPage) {
       res.redirect(LOGIN_PATH);
