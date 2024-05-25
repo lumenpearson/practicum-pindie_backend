@@ -1,5 +1,3 @@
-// routes/api.js
-
 const apiRouter = require("express").Router();
 
 const authRouter = require("./auth");
