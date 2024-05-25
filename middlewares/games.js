@@ -1,23 +1,11 @@
 const games = require("../models/game");
-const {
-  ERR_CREATE_GAME,
-  ERR_GAME_NOT_FOUND,
-  ERR_UPDATE_GAME,
-  ERR_DELETE_GAME,
-  ERR_FILL_ALL_FIELDS,
-  ERR_USER_CHANGES,
-  ERR_SELECT_CATEGORY,
-  ERR_GAME_EXISTS,
-  ERR_VOTE_GAME,
-  ERR_VOTE_CANCEL,
-} = require("@/config");
 
 const createGame = async (req, res, next) => {
   try {
     req.game = await games.create(req.body);
     next();
   } catch {
-    res.status(400).send(ERR_CREATE_GAME);
+    res.status(400).send("Ошибка создания игры");
   }
 };
 
@@ -51,7 +39,7 @@ const findGameById = async (req, res, next) => {
       });
     next();
   } catch {
-    res.status(404).send({ message: ERR_GAME_NOT_FOUND });
+    res.status(404).send({ message: "Игра не найдена" });
   }
 };
 
@@ -60,7 +48,7 @@ const updateGame = async (req, res, next) => {
     req.game = await games.findByIdAndUpdate(req.params.id, req.body);
     next();
   } catch {
-    res.status(400).send({ message: ERR_UPDATE_GAME });
+    res.status(400).send({ message: "Ошибка обновления игры" });
   }
 };
 
@@ -69,7 +57,7 @@ const deleteGame = async (req, res, next) => {
     req.game = await games.findByIdAndDelete(req.params.id);
     next();
   } catch {
-    res.status(400).send({ message: ERR_DELETE_GAME });
+    res.status(400).send({ message: "Ошибка удаления игры" });
   }
 };
 
@@ -82,7 +70,7 @@ const checkEmptyFields = async (req, res, next) => {
     !req.body.developer
   ) {
     res.setHeader("Content-Type", "application/json");
-    res.status(400).send(JSON.stringify({ message: ERR_FILL_ALL_FIELDS }));
+    res.status(400).send(JSON.stringify({ message: "Заполните все поля" }));
   } else {
     next();
   }
@@ -100,7 +88,8 @@ const checkIfUsersAreSafe = async (req, res, next) => {
     res.setHeader("Content-Type", "application/json");
     res.status(400).send(
       JSON.stringify({
-        message: ERR_USER_CHANGES,
+        message:
+          "Нельзя удалять пользователей или добавлять больше одного пользователя",
       })
     );
   }
@@ -109,7 +98,9 @@ const checkIfUsersAreSafe = async (req, res, next) => {
 const checkIfCategoriesAvaliable = async (req, res, next) => {
   if (!req.body.categories || req.body.categories.length === 0) {
     res.setHeader("Content-Type", "application/json");
-    res.status(400).send(JSON.stringify({ message: ERR_SELECT_CATEGORY }));
+    res
+      .status(400)
+      .send(JSON.stringify({ message: "Выберите хотя бы одну категорию" }));
   } else {
     next();
   }
@@ -118,13 +109,17 @@ const checkIfCategoriesAvaliable = async (req, res, next) => {
 const checkIsGameExists = async (req, res, next) => {
   const isInArray = req.gamesArray.find((game) => {
     return (
-      req.body.title === game.title && game._id.toString() !== req.params.id
+      req.body.title === game.titlev && game._id.toString() !== req.params.id
     );
   });
 
   if (isInArray) {
     res.setHeader("Content-Type", "application/json");
-    res.status(400).send(JSON.stringify({ message: ERR_GAME_EXISTS }));
+    res
+      .status(400)
+      .send(
+        JSON.stringify({ message: "Игра с таким названием уже существует" })
+      );
   } else {
     next();
   }
@@ -138,13 +133,15 @@ const voteGame = async (req, res, next) => {
 
     if (!success) {
       res.setHeader("Content-Type", "application/json");
-      res.status(400).send(JSON.stringify({ message: ERR_VOTE_GAME }));
+      res
+        .status(400)
+        .send(JSON.stringify({ message: "Ошибка при голосовании" }));
     }
 
     next();
   } catch {
     res.setHeader("Content-Type", "application/json");
-    res.status(404).send(JSON.stringify({ message: ERR_GAME_NOT_FOUND }));
+    res.status(404).send(JSON.stringify({ message: "Игра не найдена" }));
   }
 };
 
@@ -156,13 +153,15 @@ const unvoteGame = async (req, res, next) => {
 
     if (!success) {
       res.setHeader("Content-Type", "application/json");
-      res.status(400).send(JSON.stringify({ message: ERR_VOTE_CANCEL }));
+      res
+        .status(400)
+        .send(JSON.stringify({ message: "Ошибка при отмене голоса" }));
     }
 
     next();
   } catch {
     res.setHeader("Content-Type", "application/json");
-    res.status(404).send(JSON.stringify({ message: ERR_GAME_NOT_FOUND }));
+    res.status(404).send(JSON.stringify({ message: "Игра не найдена" }));
   }
 };
 

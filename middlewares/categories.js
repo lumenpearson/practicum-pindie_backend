@@ -1,12 +1,4 @@
 const categories = require("../models/category");
-const {
-  ERR_CAT_CREATE,
-  ERR_CAT_UPDATE,
-  ERR_CAT_DELETE,
-  ERR_CAT_NOT_FOUND,
-  ERR_CAT_NAME_REQUIRED,
-  ERR_CAT_EXISTS,
-} = require("@/config");
 
 const createCategory = async (req, res, next) => {
   try {
@@ -14,7 +6,9 @@ const createCategory = async (req, res, next) => {
     next();
   } catch {
     res.setHeader("Content-Type", "application/json");
-    res.status(400).send(JSON.stringify({ message: ERR_CAT_CREATE }));
+    res
+      .status(400)
+      .send(JSON.stringify({ message: "Ошибка создания категории" }));
   }
 };
 
@@ -29,7 +23,7 @@ const findCategoryById = async (req, res, next) => {
     next();
   } catch {
     res.setHeader("Content-Type", "application/json");
-    res.status(404).send(JSON.stringify({ message: ERR_CAT_NOT_FOUND }));
+    res.status(404).send(JSON.stringify({ message: "Категория не найдена" }));
   }
 };
 
@@ -38,7 +32,7 @@ const updateCategory = async (req, res, next) => {
     req.category = await categories.findByIdAndUpdate(req.params.id, req.body);
     next();
   } catch {
-    res.status(400).send({ message: ERR_CAT_UPDATE });
+    res.status(400).send({ message: "Ошибка обновления категории" });
   }
 };
 
@@ -48,14 +42,18 @@ const deleteCategory = async (req, res, next) => {
     next();
   } catch {
     res.setHeader("Content-Type", "application/json");
-    res.status(400).send(JSON.stringify({ message: ERR_CAT_DELETE }));
+    res
+      .status(400)
+      .send(JSON.stringify({ message: "Ошибка удаления категории" }));
   }
 };
 
 const checkEmptyName = async (req, res, next) => {
   if (!req.body.name) {
     res.setHeader("Content-Type", "application/json");
-    res.status(400).send(JSON.stringify({ message: ERR_CAT_NAME_REQUIRED }));
+    res
+      .status(400)
+      .send(JSON.stringify({ message: "Введите название категории" }));
   } else {
     next();
   }
@@ -73,7 +71,7 @@ const checkIsCategoryExists = async (req, res, next) => {
     res.setHeader("Content-Type", "application/json");
     res.status(400).send(
       JSON.stringify({
-        message: ERR_CAT_EXISTS,
+        message: "Категория с таким названием уже существует",
       })
     );
   } else {

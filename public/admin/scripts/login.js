@@ -1,5 +1,4 @@
 import { showTooltip } from "./dom-creators.js";
-import { ERR_NO_RIGHTS } from "@/config";
 
 const form = document.querySelector(".auth-form");
 form &&
@@ -20,7 +19,7 @@ form &&
       const result = await response.json();
 
       if (!result.admin) {
-        showTooltip(ERR_NO_RIGHTS);
+        showTooltip("Недостаточно прав");
         return;
       }
 
@@ -43,12 +42,10 @@ logoutButton &&
 window.onload = function () {
   var urlParams = new URLSearchParams(window.location.search);
   var notAdminParam = urlParams.get("not_admin");
-
   if (notAdminParam === "true") {
-    showTooltip(ERR_NO_RIGHTS);
+    showTooltip("Недостаточно прав");
     var url = new URL(window.location.href);
     url.searchParams.delete("not_admin");
-
-    history.replaceState({}, document.title, `${url.pathname}${url.search}`);
+    history.replaceState({}, document.title, url.pathname + url.search);
   }
 };

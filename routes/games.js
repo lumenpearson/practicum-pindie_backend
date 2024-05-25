@@ -1,6 +1,5 @@
 const gamesRouter = require("express").Router();
 const { Authorize, checkAdmin } = require("../middlewares/auth.js");
-
 const {
   createGame,
   findAllGames,
@@ -32,7 +31,7 @@ gamesRouter.post(
   findAllGames,
   checkIsGameExists,
   createGame,
-  sendGameCreated
+  sendGameCreated,
 );
 gamesRouter.get("/games", findAllGames, sendAllGames);
 gamesRouter.get("/games/:id", findGameById, sendGameById);
@@ -47,14 +46,14 @@ gamesRouter.put(
   findAllGames,
   checkIsGameExists,
   updateGame,
-  sendGameUpdated
+  sendGameUpdated,
 );
 gamesRouter.delete(
   "/games/:id",
   Authorize,
   checkAdmin,
   deleteGame,
-  sendGameDeleted
+  sendGameDeleted,
 );
 gamesRouter.post("/games/:id/vote", Authorize, voteGame, sendVoteResult);
 gamesRouter.post("/games/:id/unvote", Authorize, unvoteGame, sendVoteResult);

@@ -196,7 +196,9 @@ const addDeleteUsersListeners = async () => {
     button.addEventListener("click", async (event) => {
       event.preventDefault();
       const id = event.currentTarget.dataset.id;
-      const approved = confirm("Are you sure you want to delete this user?");
+      const approved = confirm(
+        "Вы уверены, что хотите удалить этого пользователя?"
+      );
       if (approved) {
         await deleteUsers(id);
         reload("users");

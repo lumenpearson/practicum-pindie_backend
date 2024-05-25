@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const path = require("path");
 
-const { MONGODB_CONN, PORT, URL } = require("./config");
+const { MONGODB_CONN, PORT, LOGIN_PATH, URL } = require("./config");
 
 const { cors } = require("./middlewares/cors");
 const { connectToDatabase } = require("./database/connect");
@@ -39,6 +39,10 @@ app.use(
   pagesRouter,
   express.static(path.join(path.resolve(), "./public"))
 );
+
+app.get("/", (req, res) => {
+  res.redirect(LOGIN_PATH);
+});
 
 app.listen(PORT, async () => {
   let chalk;

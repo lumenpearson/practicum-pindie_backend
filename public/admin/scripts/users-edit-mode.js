@@ -11,11 +11,9 @@ const useUserState = () => {
   function setCurrentUserState(key, value) {
     userCurrentState[key] = value;
   }
-
   function setUsersEditModeOn(state) {
     usersEditModeOn = state;
   }
-
   return { setCurrentUserState, setUsersEditModeOn };
 };
 

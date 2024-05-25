@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const users = require("../models/user");
-const { SECRET_KEY, JWT_EXPIRES_IN, ERR_USER_CREATE } = require("@/config");
+const { SECRET_KEY, JWT_EXPIRES_IN } = require("../config");
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -39,7 +39,9 @@ const signup = async (req, res) => {
     });
   } catch {
     res.setHeader("Content-Type", "application/json");
-    res.status(400).send(JSON.stringify({ message: ERR_USER_CREATE }));
+    res
+      .status(400)
+      .send(JSON.stringify({ message: "Ошибка создания пользователя" }));
 
     return;
   }

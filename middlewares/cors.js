@@ -1,4 +1,4 @@
-const { CORS } = require("@/config");
+const { CORS } = require("../config");
 
 function cors(req, res, next) {
   const { origin } = req.headers;
@@ -14,7 +14,6 @@ function cors(req, res, next) {
       "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization"
     );
   }
-
   next();
 }
 

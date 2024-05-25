@@ -1,5 +1,5 @@
 const path = require("path");
-const { LOGIN_PATH } = require("@/config");
+const { LOGIN_PATH } = require("../config");
 
 const sendLogin = (req, res) => {
   if (req.user && req.user.admin) {
