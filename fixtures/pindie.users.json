@@ -6,6 +6,7 @@
     "username": "aski",
     "email": "aski@example.com",
     "password": "$2a$10$LgqW2yoQxJ6nDBaS8nfM3urShNcn0m95wgyES2lqLw2kXicCHyfmC",
+    "admin": true,
     "__v": 0
   },
   {
