@@ -1,5 +1,5 @@
 {
-  "name": "practicum-pindie-backend",
+  "name": "pindie-backend",
   "version": "0.1.0",
   "private": true,
   "main": "index.js",
@@ -10,7 +10,6 @@
     "lint": "eslint .",
     "dev": "cross-env nodemon index.js | bunyan"
   },
-  "author": "LumenPearson <lumenpearson@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
