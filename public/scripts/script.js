@@ -2,7 +2,7 @@ import { getData } from "./api-interactors.js";
 import {
   renderGames,
   renderUsersList,
-  renderCategoriesList,
+  renderCategoriesList
 } from "./dom-creators.js";
 import { addCategoriesEditModeListeners } from "./categories-edit-mode.js";
 import { addGamesEditModeListeners } from "./games-edit-mode.js";
@@ -13,7 +13,7 @@ import {
   addUserFormListeners,
   addDeleteGameListeners,
   addDeleteCategoryListeners,
-  addDeleteUsersListeners,
+  addDeleteUsersListeners
 } from "./requests.js";
 
 export let gamesState = [];

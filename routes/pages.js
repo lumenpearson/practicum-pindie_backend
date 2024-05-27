@@ -1,8 +1,8 @@
 const pagesRouter = require("express").Router();
-const { AuthorizePages } = require("../middlewares/pages.js");
-const { sendLogin, sendDashboard } = require("../controllers/pages.js");
+const { sendIndex, sendDashboard } = require("../controllers/auth");
+const { checkCookiesJWT, checkAuth } = require("../middlewares/auth");
 
-pagesRouter.get("/admin/login", AuthorizePages, sendLogin);
-pagesRouter.get("/admin", AuthorizePages, sendDashboard);
+pagesRouter.get("/", sendIndex);
+pagesRouter.get("/admin/**", checkCookiesJWT, checkAuth, sendDashboard);
 
 module.exports = pagesRouter;

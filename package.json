@@ -1,30 +1,21 @@
 {
-  "name": "practicum-pindie_backend",
-  "version": "1.0.0",
+  "name": "practicum-pindie-backend",
+  "version": "0.1.0",
   "private": true,
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env nodemon index.js | bunyan",
     "start": "cross-env pm2 describe pindie_backend > NUL && pm2 stop pindie_backend && pm2 delete pindie_backend || true && pm2 start index.js --name pindie_backend | bunyan",
     "stop": "cross-env pm2 describe pindie_backend > NUL && pm2 stop pindie_backend && pm2 delete pindie_backend || true",
     "format": "prettier --write .",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "dev": "cross-env nodemon index.js | bunyan"
   },
-  "license": "MIT",
   "author": "LumenPearson <lumenpearson@gmail.com>",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lumenpearson/practicum-pindie_backend.git"
-  },
-  "bugs": {
-    "url": "https://github.com/lumenpearson/practicum-pindie_backend/issues"
-  },
-  "homepage": "https://github.com/lumenpearson/practicum-pindie_backend/readme",
+  "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "bunyan": "^1.8.15",
-    "chalk": "^5.3.0",
     "cookie-parser": "^1.4.6",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",

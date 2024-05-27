@@ -4,22 +4,18 @@ const createGameForm = () => {
   const template = document.querySelector(".add-game-form");
   const clone = template.content.cloneNode(true);
   const parent = clone.querySelector(".categories-fields");
-  
-  categoriesState.forEach((category) => {
+  categoriesState.forEach(category => {
     const label = document.createElement("label");
     label.className = "form-label";
-    
     const span = document.createElement("span");
     span.textContent = category.name;
     span.className = "form-label-text";
     label.append(span);
-    
     const input = document.createElement("input");
     input.type = "checkbox";
     input.name = "categories";
     input.className = "checkbox";
     input.value = category._id;
-    
     label.append(input);
     parent.append(label);
   });
@@ -35,7 +31,8 @@ const appendGameForm = () => {
 
 const createCategoryForm = () => {
   const template = document.querySelector(".add-category-form");
-  return template.content.cloneNode(true);
+  const clone = template.content.cloneNode(true);
+  return clone;
 };
 
 const appendCategoryForm = () => {
@@ -47,7 +44,8 @@ const appendCategoryForm = () => {
 
 const createUserForm = () => {
   const template = document.querySelector(".add-user-form");
-  return template.content.cloneNode(true);
+  const clone = template.content.cloneNode(true);
+  return clone;
 };
 
 const appendUserForm = () => {
@@ -57,7 +55,7 @@ const appendUserForm = () => {
   parent.append(userForm);
 };
 
-const createCategoryCheckboxInEditModeForm = (categoryObj) => {
+const createCategoryCheckboxInEditModeForm = categoryObj => {
   const clone = document
     .querySelector("#categories-checkbox")
     .content.cloneNode(true);
@@ -67,7 +65,7 @@ const createCategoryCheckboxInEditModeForm = (categoryObj) => {
 };
 
 const appendCategoryEditModeForm = (categoryArray, parent) => {
-  categoryArray.forEach((category) => {
+  categoryArray.forEach(category => {
     const checkbox = createCategoryCheckboxInEditModeForm(category);
     parent.append(checkbox);
   });
@@ -77,5 +75,5 @@ export {
   appendGameForm,
   appendCategoryForm,
   appendUserForm,
-  appendCategoryEditModeForm,
+  appendCategoryEditModeForm
 };

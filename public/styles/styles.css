@@ -1,12 +1,12 @@
 @font-face {
   font-family: "Inter";
-  src: url(../fonts/Inter-Regular.woff) format("woff");
+  src: url(/fonts/Inter-Regular.woff) format("woff");
   font-weight: normal;
 }
 
 @font-face {
   font-family: "Inter";
-  src: url(../fonts/Inter-Bold.woff) format("woff");
+  src: url(/fonts/Inter-Bold.woff) format("woff");
   font-weight: bold;
 }
 
@@ -206,10 +206,6 @@ button {
 
 .icon-button:hover svg {
   stroke: tomato;
-}
-
-.edit-button:hover svg {
-  stroke: darkgoldenrod !important;
 }
 
 .categories li {

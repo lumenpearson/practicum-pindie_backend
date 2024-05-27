@@ -1,59 +1,46 @@
 const usersRouter = require("express").Router();
-const { Authorize, checkAdmin } = require("../middlewares/auth.js");
 const {
-  createUser,
-  findAllUsers,
-  findUserById,
-  updateUser,
-  deleteUser,
-  hashPassword,
-  checkEmptyNameAndEmailAndPassword,
-  checkEmptyNameAndEmail,
-  validateUsername,
-  validateEmail,
-  checkIsUserExists,
+    findAllUsers,
+    createUser,
+    findUserById,
+    updateUser,
+    deleteUser,
+    checkEmptyNameAndEmailAndPassword,
+    checkEmptyNameAndEmail,
+    checkIsUserExists,
+    hashPassword,
+    findMe,
 } = require("../middlewares/users");
 const {
-  sendUserCreated,
-  sendAllUsers,
-  sendUserById,
-  sendUserUpdated,
-  sendUserDeleted,
+    sendAllUsers,
+    sendUserCreated,
+    sendUserById,
+    sendUserUpdated,
+    sendUserDeleted,
+    sendMe,
 } = require("../controllers/users");
+const { checkAuth } = require("../middlewares/auth");
 
-usersRouter.post(
-  "/users",
-  Authorize,
-  checkAdmin,
-  checkEmptyNameAndEmailAndPassword,
-  validateUsername,
-  validateEmail,
-  findAllUsers,
-  checkIsUserExists,
-  hashPassword,
-  createUser,
-  sendUserCreated
-);
 usersRouter.get("/users", findAllUsers, sendAllUsers);
 usersRouter.get("/users/:id", findUserById, sendUserById);
+usersRouter.get("/me", checkAuth, findMe, sendMe);
+usersRouter.post(
+    "/users",
+    findAllUsers,
+    checkIsUserExists,
+    checkEmptyNameAndEmailAndPassword,
+    checkAuth,
+    hashPassword,
+    createUser,
+    sendUserCreated
+);
 usersRouter.put(
-  "/users/:id",
-  Authorize,
-  checkAdmin,
-  checkEmptyNameAndEmail,
-  validateUsername,
-  validateEmail,
-  findAllUsers,
-  checkIsUserExists,
-  updateUser,
-  sendUserUpdated
+    "/users/:id",
+    checkEmptyNameAndEmail,
+    checkAuth,
+    updateUser,
+    sendUserUpdated
 );
-usersRouter.delete(
-  "/users/:id",
-  Authorize,
-  checkAdmin,
-  deleteUser,
-  sendUserDeleted
-);
+usersRouter.delete("/users/:id", checkAuth, deleteUser, sendUserDeleted);
 
 module.exports = usersRouter;

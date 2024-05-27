@@ -1,41 +1,27 @@
 const jwt = require("jsonwebtoken");
-const users = require("../models/user");
-const { SECRET_KEY } = require("../config");
 
-const Authorize = async (req, res, next) => {
-  let token;
-  const { authorization } = req.headers;
+const checkAuth = (req, res, next) => {
+    const { authorization } = req.headers;
 
-  if (authorization && authorization.startsWith("Bearer ")) {
-    token = authorization.replace("Bearer ", "");
-  } else {
-    token = req.cookies.jwt;
-  }
-  
-  if (!token) {
-    return res.status(401).send({ message: "Необходима авторизация" });
-  }
-
-  try {
-    req.token = await jwt.verify(token, SECRET_KEY);
-    req.user = await users.findById(req.token._id, { password: 0 });
-
-    if (!req.user) {
-      return res.status(401).send({ message: "Необходима авторизация" });
+    if (!authorization || !authorization.startsWith("Bearer ")) {
+        return res.status(401).send({ message: "Authorization required" });
     }
-  } catch {
-    return res.status(401).send({ message: "Необходима авторизация" });
-  }
 
-  next();
-};
-
-const checkAdmin = async (req, res, next) => {
-  if (req.user && req.user.admin) {
+    const token = authorization.replace("Bearer ", "");
+    try {
+        req.user = jwt.verify(token, "never-gonna-give-you-up");
+    } catch (error) {
+        return res.status(401).send({ message: "Authorization required" });
+    }
     next();
-  } else {
-    res.status(403).send({ message: "Недостаточно прав" });
-  }
 };
 
-module.exports = { Authorize, checkAdmin };
+const checkCookiesJWT = (req, res, next) => {
+    if (!req.cookies.jwt) {
+        return res.redirect("/");
+    }
+    req.headers.authorization = `Bearer ${req.cookies.jwt}`;
+    next();
+};
+
+module.exports = { checkAuth, checkCookiesJWT };

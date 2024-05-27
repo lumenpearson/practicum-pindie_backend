@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
-const { logger } = require("../logger");
+const DB_URL = "mongodb://localhost:27017/pindie";
 
-async function connectToDatabase(MONGODB_CONN) {
-  try {
-    await mongoose.connect(MONGODB_CONN);
-    logger.info("Connected to mongodb.");
-  } catch (err) {
-    logger.error("Error connecting to mongodb.");
-    logger.error(err);
-  }
+async function connectToDatabase() {
+    try {
+        await mongoose.connect(DB_URL);
+        console.log("Successfully connected to MongoDB");
+    } catch (err) {
+        console.log("An error occurred while connecting MongoDB");
+        console.error(err);
+    }
 }
 
-module.exports = { connectToDatabase };
+module.exports = connectToDatabase;
