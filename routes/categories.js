@@ -1,26 +1,24 @@
-// Создаём роут для запросов категорий
-const categoriesRouter = require("express").Router();
-const { checkAuth } = require("../middlewares/auth.js");
-
-// Импортируем вспомогательные функции
-const {
-  findAllCategories,
-  createCategory,
-  findCategoryById,
-  updateCategory,
-  deleteCategory,
-  checkIsCategoryExists,
-  checkEmptyName,
-} = require("../middlewares/categories");
-const {
-  sendAllCategories,
+import express from "express";
+import {
   sendCategoryCreated,
+  sendAllCategories,
+  sendCategoryDeleted,
   sendCategoryById,
   sendCategoryUpdated,
-  sendCategoryDeleted,
-} = require("../controllers/categories");
+} from "../controllers/categories.js";
+import {
+  checkIsCategoryExists,
+  createCategory,
+  deleteCategory,
+  findAllCategories,
+  findCategoryById,
+  updateCategory,
+} from "../middlewares/categories.js";
+import { checkEmptyName } from "../middlewares/users.js";
+import { checkAuth } from "../middlewares/auth.js";
 
-// Обрабатываем запросы
+const categoriesRouter = express.Router();
+
 categoriesRouter.get("/categories", findAllCategories, sendAllCategories);
 categoriesRouter.get("/categories/:id", findCategoryById, sendCategoryById);
 categoriesRouter.post(
@@ -32,18 +30,20 @@ categoriesRouter.post(
   createCategory,
   sendCategoryCreated
 );
+categoriesRouter.delete(
+  "/categories/:id",
+  findCategoryById,
+  checkAuth,
+  deleteCategory,
+  sendCategoryDeleted
+);
 categoriesRouter.put(
   "/categories/:id",
+  findCategoryById,
   checkEmptyName,
   checkAuth,
   updateCategory,
   sendCategoryUpdated
 );
-categoriesRouter.delete(
-  "/categories/:id",
-  checkAuth,
-  deleteCategory,
-  sendCategoryDeleted
-);
-// Экспортируем роут для использования в приложении — app.js
-module.exports = categoriesRouter;
+
+export default categoriesRouter;

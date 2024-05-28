@@ -1,34 +1,32 @@
-const sendAllCategories = (req, res) => {
-  // Установим заголовок ответа в формате JSON
-  res.setHeader("Content-Type", "application/json");
-  // Отправим данные в виде JSON-объекта,
-  // которые подготовим в миддлваре findAllCategories
-  res.end(JSON.stringify(req.categoriesArray));
+const sendAllCategories = (request, response) => {
+  response.setHeader("Content-Type", "application/json");
+  response.end(JSON.stringify(request.categoriesArray));
 };
 
-const sendCategoryCreated = (req, res) => {
-  res.setHeader("Content-Type", "application/json");
-  res.end(JSON.stringify(req.category));
+const sendCategoryCreated = (request, response) => {
+  response.setHeader("Content-Type", "application/json");
+  response.end(JSON.stringify(request.category));
 };
 
-const sendCategoryById = (req, res) => {
-  res.setHeader("Content-Type", "application/json");
-  res.end(JSON.stringify(req.category));
+const sendCategoryDeleted = (request, response) => {
+  response.setHeader("Content-Type", "application/json");
+  response.end(JSON.stringify(request.category));
 };
 
-const sendCategoryUpdated = (req, res) => {
-  res.setHeader("Content-Type", "application/json");
-  res.status(200).send(JSON.stringify({ message: "Категория обновлена" }));
+const sendCategoryById = (request, response) => {
+  response.setHeader("Content-Type", "application/json");
+  response.end(JSON.stringify(request.category));
 };
-const sendCategoryDeleted = (req, res) => {
-  res.setHeader("Content-Type", "application/json");
-  res.end(JSON.stringify(req.category));
+
+const sendCategoryUpdated = (request, response) => {
+  response.setHeader("Content-Type", "application/json");
+  response.end(JSON.stringify({ message: "Category Update" }));
 };
-// Экспортируем контроллер
-module.exports = {
+
+export {
   sendAllCategories,
   sendCategoryCreated,
+  sendCategoryDeleted,
   sendCategoryById,
   sendCategoryUpdated,
-  sendCategoryDeleted,
 };

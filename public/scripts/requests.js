@@ -3,25 +3,25 @@ import {
   currentState,
   changeGameEditMode,
   addGamesEditModeListeners,
-  fillStoreWithEditableElements
+  fillStoreWithEditableElements,
 } from "./games-edit-mode.js";
 import {
   changeCategoryEditMode,
   currentCategoryState,
   addCategoriesEditModeListeners,
-  fillCategoriesStateFromForm
+  fillCategoriesStateFromForm,
 } from "./categories-edit-mode.js";
 import {
   userCurrentState,
   changeUserEditMode,
   fillUsersStateFromForm,
-  addUsersEditModeListeners
+  addUsersEditModeListeners,
 } from "./users-edit-mode.js";
 import { reload } from "./script.js";
 import { closeDialog } from "./dialogs-controller.js";
 import { showTooltip, hideTooltip } from "./dom-creators.js";
 
-const prepareFormData = form => {
+const prepareFormData = (form) => {
   const data = new FormData(form);
   var object = {};
   data.forEach((value, key) => {
@@ -37,7 +37,7 @@ const prepareFormData = form => {
   return object;
 };
 
-const postNewGame = async form => {
+const postNewGame = async (form) => {
   const object = prepareFormData(form);
   try {
     const response = await postData("/api/games", object);
@@ -51,7 +51,7 @@ const postNewGame = async form => {
   }
 };
 
-const postNewCategory = async form => {
+const postNewCategory = async (form) => {
   const object = prepareFormData(form);
   try {
     const response = await postData("/api/categories", object);
@@ -65,7 +65,7 @@ const postNewCategory = async form => {
   }
 };
 
-const postNewUser = async form => {
+const postNewUser = async (form) => {
   const object = prepareFormData(form);
   try {
     const response = await postData("/api/users", object);
@@ -79,7 +79,7 @@ const postNewUser = async form => {
   }
 };
 
-const handleAddGamesSubmit = async event => {
+const handleAddGamesSubmit = async (event) => {
   event.preventDefault();
   const form = document.querySelector(".form--game");
   const res = await postNewGame(form);
@@ -102,7 +102,7 @@ const removeGameFormListeners = () => {
   form && form.removeEventListener("submit", handleAddGamesSubmit);
 };
 
-const handleAddCategoriesSubmit = async event => {
+const handleAddCategoriesSubmit = async (event) => {
   event.preventDefault();
   const form = document.querySelector(".form--category");
   const res = await postNewCategory(form);
@@ -125,7 +125,7 @@ const removeCategoryFormListeners = () => {
   form && form.removeEventListener("submit", handleAddCategoriesSubmit);
 };
 
-const handleAddUsersSubmit = async event => {
+const handleAddUsersSubmit = async (event) => {
   event.preventDefault();
   const form = document.querySelector(".form--user");
   const res = await postNewUser(form);
@@ -148,15 +148,15 @@ const removeUserFormListeners = () => {
   form && form.removeEventListener("submit", handleAddUsersSubmit);
 };
 
-const deleteGame = async id => {
+const deleteGame = async (id) => {
   const response = await deleteData(`/api/games/${id}`);
   return response;
 };
 
 const addDeleteGameListeners = async () => {
   const deleteButtons = document.querySelectorAll(".delete-game-button");
-  deleteButtons.forEach(button => {
-    button.addEventListener("click", async event => {
+  deleteButtons.forEach((button) => {
+    button.addEventListener("click", async (event) => {
       event.preventDefault();
       const id = event.target.dataset.id;
       const approved = confirm("Вы уверены, что хотите удалить эту игру?");
@@ -168,15 +168,15 @@ const addDeleteGameListeners = async () => {
   });
 };
 
-const deleteCategory = async id => {
+const deleteCategory = async (id) => {
   const response = await deleteData(`/api/categories/${id}`);
   return response;
 };
 
 const addDeleteCategoryListeners = async () => {
   const deleteButtons = document.querySelectorAll(".delete-category-button");
-  deleteButtons.forEach(button => {
-    button.addEventListener("click", async event => {
+  deleteButtons.forEach((button) => {
+    button.addEventListener("click", async (event) => {
       event.preventDefault();
       const id = event.currentTarget.dataset.id;
       const approved = confirm("Вы уверены, что хотите удалить эту категорию?");
@@ -188,15 +188,15 @@ const addDeleteCategoryListeners = async () => {
   });
 };
 
-const deleteUsers = async id => {
+const deleteUsers = async (id) => {
   const response = await deleteData(`/api/users/${id}`);
   return response;
 };
 
 const addDeleteUsersListeners = async () => {
   const deleteButtons = document.querySelectorAll(".delete-user-button");
-  deleteButtons.forEach(button => {
-    button.addEventListener("click", async event => {
+  deleteButtons.forEach((button) => {
+    button.addEventListener("click", async (event) => {
       event.preventDefault();
       const id = event.currentTarget.dataset.id;
       const approved = confirm(
@@ -210,7 +210,7 @@ const addDeleteUsersListeners = async () => {
   });
 };
 
-const putGame = async id => {
+const putGame = async (id) => {
   try {
     const response = await putData(`/api/games/${id}`, currentState);
     if (response instanceof Error) {
@@ -223,7 +223,7 @@ const putGame = async id => {
   }
 };
 
-const sendGameUpdateAndTurnOffEditMode = async event => {
+const sendGameUpdateAndTurnOffEditMode = async (event) => {
   event.preventDefault();
   const id = event.target.dataset.id;
   fillStoreWithEditableElements(id);
@@ -238,21 +238,24 @@ const sendGameUpdateAndTurnOffEditMode = async event => {
 
 const removePutGameListeners = () => {
   const putButtons = document.querySelectorAll(".edit-game-button");
-  putButtons.forEach(button => {
+  putButtons.forEach((button) => {
     button.removeEventListener("click", sendGameUpdateAndTurnOffEditMode);
   });
 };
 
 const addPutGameListeners = () => {
   const putButtons = document.querySelectorAll(".edit-game-button");
-  putButtons.forEach(button => {
+  putButtons.forEach((button) => {
     button.addEventListener("click", sendGameUpdateAndTurnOffEditMode);
   });
 };
 
-const putCategory = async id => {
+const putCategory = async (id) => {
   try {
-    const response = await putData(`/api/categories/${id}`, currentCategoryState);
+    const response = await putData(
+      `/api/categories/${id}`,
+      currentCategoryState
+    );
     if (response instanceof Error) {
       throw new Error(response.message);
     }
@@ -265,12 +268,12 @@ const putCategory = async id => {
 
 const removePutCategoryListeners = () => {
   const putButtons = document.querySelectorAll(".edit-category-button");
-  putButtons.forEach(button => {
+  putButtons.forEach((button) => {
     button.removeEventListener("click", sendCategoryUpdateAndTurnOffEditMode);
   });
 };
 
-const sendCategoryUpdateAndTurnOffEditMode = async event => {
+const sendCategoryUpdateAndTurnOffEditMode = async (event) => {
   event.preventDefault();
   const id = event.currentTarget.dataset.id;
   fillCategoriesStateFromForm(id);
@@ -285,12 +288,12 @@ const sendCategoryUpdateAndTurnOffEditMode = async event => {
 
 const addPutCategoryListeners = async () => {
   const putButtons = document.querySelectorAll(".edit-category-button");
-  putButtons.forEach(button => {
+  putButtons.forEach((button) => {
     button.addEventListener("click", sendCategoryUpdateAndTurnOffEditMode);
   });
 };
 
-const putUser = async id => {
+const putUser = async (id) => {
   try {
     const response = await putData(`/api/users/${id}`, userCurrentState);
     if (response instanceof Error) {
@@ -305,12 +308,12 @@ const putUser = async id => {
 
 const removePutUserListeners = () => {
   const putButtons = document.querySelectorAll(".edit-user-button");
-  putButtons.forEach(button => {
+  putButtons.forEach((button) => {
     button.removeEventListener("click", sendUserUpdateAndTurnOffEditMode);
   });
 };
 
-const sendUserUpdateAndTurnOffEditMode = async event => {
+const sendUserUpdateAndTurnOffEditMode = async (event) => {
   event.preventDefault();
   const id = event.currentTarget.dataset.id;
   fillUsersStateFromForm(id);
@@ -325,7 +328,7 @@ const sendUserUpdateAndTurnOffEditMode = async event => {
 
 const addPutUserListeners = async () => {
   const putButtons = document.querySelectorAll(".edit-user-button");
-  putButtons.forEach(button => {
+  putButtons.forEach((button) => {
     button.addEventListener("click", sendUserUpdateAndTurnOffEditMode);
   });
 };
@@ -345,5 +348,5 @@ export {
   addPutUserListeners,
   removePutCategoryListeners,
   removePutUserListeners,
-  removePutGameListeners
+  removePutGameListeners,
 };

@@ -1,4 +1,6 @@
-### — [Фронтенд](https://github.com/lumenpearson/practicum-pindie_frontend/tree/last-review)
+# PindieAPI
+
+### — [Фронтенд](https://github.com/lumenpearson/practicum-pindie_frontend)
 
 ### — [Домен фронтенда](https://lumens-pindie.nomoredomainswork.ru)
 

@@ -2,7 +2,7 @@ import { showTooltip } from "./dom-creators.js";
 
 const form = document.querySelector(".auth-form");
 form &&
-  form.addEventListener("submit", async event => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const formData = new FormData(form);
     try {

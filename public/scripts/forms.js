@@ -4,7 +4,7 @@ const createGameForm = () => {
   const template = document.querySelector(".add-game-form");
   const clone = template.content.cloneNode(true);
   const parent = clone.querySelector(".categories-fields");
-  categoriesState.forEach(category => {
+  categoriesState.forEach((category) => {
     const label = document.createElement("label");
     label.className = "form-label";
     const span = document.createElement("span");
@@ -55,7 +55,7 @@ const appendUserForm = () => {
   parent.append(userForm);
 };
 
-const createCategoryCheckboxInEditModeForm = categoryObj => {
+const createCategoryCheckboxInEditModeForm = (categoryObj) => {
   const clone = document
     .querySelector("#categories-checkbox")
     .content.cloneNode(true);
@@ -65,7 +65,7 @@ const createCategoryCheckboxInEditModeForm = categoryObj => {
 };
 
 const appendCategoryEditModeForm = (categoryArray, parent) => {
-  categoryArray.forEach(category => {
+  categoryArray.forEach((category) => {
     const checkbox = createCategoryCheckboxInEditModeForm(category);
     parent.append(checkbox);
   });
@@ -75,5 +75,5 @@ export {
   appendGameForm,
   appendCategoryForm,
   appendUserForm,
-  appendCategoryEditModeForm
+  appendCategoryEditModeForm,
 };

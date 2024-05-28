@@ -1,44 +1,59 @@
-const mongoose = require("mongoose");
-const userModel = require("./user");
-const categoryModel = require("./category");
+import mongoose from "mongoose";
+import user from "./user.js";
+import category from "./category.js";
 
 const gameSchema = new mongoose.Schema({
   title: {
     type: String,
+    trim: true,
+    maxLength: 255,
+    minLength: 1,
     required: true,
   },
   description: {
     type: String,
+    trim: true,
+    maxLength: 255,
+    minLength: 1,
     required: true,
   },
   developer: {
     type: String,
+    trim: true,
+    maxLength: 255,
+    minLength: 1,
     required: true,
   },
   image: {
     type: String,
+    trim: true,
+    maxLength: 255,
+    minLength: 1,
     required: true,
   },
   link: {
     type: String,
+    trim: true,
+    maxLength: 255,
+    minLength: 1,
     required: true,
   },
   users: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: userModel, // Содержит ссылки на связанные с игрой модели пользователей
+      ref: user,
     },
   ],
   categories: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: categoryModel, // Содержит ссылки на связанные с игрой модели категорий
+      ref: category,
     },
   ],
 });
 
 gameSchema.statics.findGameByCategory = function (category) {
-  return this.find({}) // Выполним поиск всех игр
+  return this.find({})
     .populate({
       path: "categories",
       match: { name: category },
@@ -48,9 +63,8 @@ gameSchema.statics.findGameByCategory = function (category) {
       select: "-password",
     })
     .then((games) => {
-      // Отфильтруем по наличию искомой категории
       return games.filter((game) => game.categories.length > 0);
     });
 };
 
-module.exports = mongoose.model("game", gameSchema);
+export default mongoose.model("game", gameSchema);

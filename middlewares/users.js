@@ -1,125 +1,108 @@
-// Файл middlewares/users.js
+import user from "../models/user.js";
+import bcrypt from "bcryptjs";
+import { request } from "express";
 
-// Импортируем модель
-const users = require("../models/user");
-const bcrypt = require("bcryptjs");
-
-const findAllUsers = async (req, res, next) => {
-  // По GET-запросу на эндпоинт /users найдём все документы пользователей
-  req.usersArray = await users.find({}, { password: 0 });
+const findAllUsers = async (request, response, next) => {
+  request.usersArray = await user.find({}, { password: 0 });
   next();
 };
-const createUser = async (req, res, next) => {
-  console.log("POST /users");
+
+const createUser = async (request, response, next) => {
   try {
-    console.log(req.body);
-    req.user = await users.create(req.body);
+    request.user = await user.create(request.body);
     next();
   } catch (error) {
-    res.setHeader("Content-Type", "application/json");
-    res
-      .status(400)
-      .send(JSON.stringify({ message: "Ошибка создания пользователя" }));
+    response.status(400).send("Error creating user");
   }
 };
-const findUserById = async (req, res, next) => {
-  console.log("GET /users/:id");
+
+const findUserById = async (request, response, next) => {
   try {
-    req.user = await users.findById(req.params.id, { password: 0 });
+    request.user = await user.findById(request.params.id, { password: 0 });
     next();
   } catch (error) {
-    res.setHeader("Content-Type", "application/json");
-    res.status(404).send(JSON.stringify({ message: "Пользователь не найден" }));
+    response.status(404).send({ message: "User not found" });
   }
 };
-const updateUser = async (req, res, next) => {
+
+const deleteUser = async (request, response, next) => {
   try {
-    // В метод передаём id из параметров запроса и объект с новыми свойствами
-    req.user = await users.findByIdAndUpdate(req.params.id, req.body);
+    request.user = await user.findByIdAndDelete(request.params.id);
     next();
   } catch (error) {
-    res.setHeader("Content-Type", "application/json");
-    res
-      .status(400)
-      .send(JSON.stringify({ message: "Ошибка обновления пользователя" }));
+    response.status(400).send("Error deleting category");
   }
+  next();
 };
-const deleteUser = async (req, res, next) => {
+
+const updateUser = async (request, response, next) => {
   try {
-    // Методом findByIdAndDelete по id находим и удаляем документ из базы данных
-    req.user = await users.findByIdAndDelete(req.params.id);
+    request.user = await user.findByIdAndUpdate(
+      request.params.id,
+      request.body
+    );
     next();
   } catch (error) {
-    res.setHeader("Content-Type", "application/json");
-    res
-      .status(400)
-      .send(JSON.stringify({ message: "Ошибка удаления пользователя" }));
+    response.status(400).send({ message: "Error update user" });
   }
 };
-const checkIsUserExists = async (req, res, next) => {
-  const isInArray = req.usersArray.find((user) => {
-    return req.body.email === user.email;
+
+const checkEmptyName = async (request, response, next) => {
+  if (!request.body.name) {
+    response.status(400).send({ message: "Enter the name of the name" });
+  } else {
+    next();
+  }
+};
+
+const checkEmptyPassword = async (request, response, next) => {
+  if (!request.body.password) {
+    response.status(400).send({ message: "Enter the name of the password" });
+  } else {
+    next();
+  }
+};
+
+const checkEmptyNameAndEmail = async (request, response, next) => {
+  if (!request.body.username || !request.body.email) {
+    response.status(400).send({ message: "Enter your name and email" });
+  } else {
+    next();
+  }
+};
+
+const checkIsUserExists = async (request, response, next) => {
+  const isInArray = request.usersArray.find((user) => {
+    return request.body.email === user.email;
   });
   if (isInArray) {
-    res.setHeader("Content-Type", "application/json");
-    res
+    response
       .status(400)
-      .send(
-        JSON.stringify({ message: "Пользователь с таким email уже существует" })
-      );
+      .send({ message: "A user with this email address already exists" });
   } else {
-    next();
-  }
-};
-const checkEmptyNameAndEmailAndPassword = async (req, res, next) => {
-  if (!req.body.username || !req.body.email || !req.body.password) {
-    // Если какое-то из полей отсутствует, то не будем обрабатывать запрос дальше,
-    // а ответим кодом 400 — данные неверны.
-    res.setHeader("Content-Type", "application/json");
-    res
-      .status(400)
-      .send(JSON.stringify({ message: "Введите имя, email и пароль" }));
-  } else {
-    // Если всё в порядке, то передадим управление следующим миддлварам
-    next();
-  }
-};
-const checkEmptyNameAndEmail = async (req, res, next) => {
-  if (!req.body.username || !req.body.email) {
-    // Если какое-то из полей отсутствует, то не будем обрабатывать запрос дальше,
-    // а ответим кодом 400 — данные неверны.
-    res.setHeader("Content-Type", "application/json");
-    res.status(400).send(JSON.stringify({ message: "Введите имя и email" }));
-  } else {
-    // Если всё в порядке, то передадим управление следующим миддлварам
     next();
   }
 };
 
-// функция хэширования пароля
-const hashPassword = async (req, res, next) => {
+const conversionToHash = async (require, response, next) => {
   try {
-    // Создаём случайную строку длиной в десять символов
     const salt = await bcrypt.genSalt(10);
-    // Хешируем пароль
-    const hash = await bcrypt.hash(req.body.password, salt);
-    // Полученный в запросе пароль подменяем на хеш
-    req.body.password = hash;
+    require.body.password = await bcrypt.hash(require.body.password, salt);
     next();
   } catch (error) {
-    res.status(400).send({ message: "Ошибка хеширования пароля" });
+    response.status(400).send({ message: "Password hashing execution error" });
   }
 };
 
-// Экспортируем функцию поиска всех пользователей
-module.exports = {
+export {
   findAllUsers,
   createUser,
   findUserById,
-  updateUser,
   deleteUser,
-  checkIsUserExists,
-  checkEmptyNameAndEmailAndPassword,
+  updateUser,
+  checkEmptyName,
   checkEmptyNameAndEmail,
-  hashPassword,
+  checkIsUserExists,
+  conversionToHash,
+  checkEmptyPassword,
 };

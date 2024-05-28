@@ -1,15 +1,11 @@
-const gamesRouter = require("./games");
-const usersRouter = require("./users");
-const categoriesRouter = require("./categories");
-const authRouter = require("./auth");
+import express from "express";
+import gamesRouter from "./games.js";
+import usersRouter from "./users.js";
+import categoriesRouter from "./categories.js";
+import { authRouter } from "./auth.js";
 
-const apiRouter = require("express").Router();
+const apiRouter = express.Router();
 
-// Импорты и инициализация главного роута
-apiRouter.use("/api", gamesRouter);
-apiRouter.use("/api", usersRouter);
-apiRouter.use("/api", categoriesRouter);
-apiRouter.use("/api", authRouter);
+apiRouter.use("/api", authRouter, gamesRouter, usersRouter, categoriesRouter);
 
-// Экспорт
-module.exports = apiRouter;
+export { apiRouter };

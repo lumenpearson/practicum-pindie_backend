@@ -1,51 +1,57 @@
-// Создаём роут для запросов пользователей
-const usersRouter = require("express").Router();
-const { checkAuth } = require("../middlewares/auth.js");
-
-// Импортируем вспомогательные функции
-const {
-  findAllUsers,
+import express from "express";
+import {
+  sendAllUsers,
+  sendMe,
+  sendUserById,
+  sendUserCreated,
+  sendUserDeleted,
+  sendUserUpdated,
+} from "../controllers/users.js";
+import {
+  checkEmptyNameAndEmail,
+  checkIsUserExists,
   createUser,
+  deleteUser,
+  findAllUsers,
   findUserById,
   updateUser,
-  deleteUser,
-  checkIsUserExists,
-  checkEmptyNameAndEmailAndPassword,
-  checkEmptyNameAndEmail,
-  hashPassword,
-} = require("../middlewares/users");
-const {
-  sendAllUsers,
-  sendUserCreated,
-  sendUserById,
-  sendUserUpdated,
-  sendUserDeleted,
-  sendMe,
-} = require("../controllers/users");
+  conversionToHash,
+  checkEmptyPassword,
+} from "../middlewares/users.js";
+import { checkAuth } from "../middlewares/auth.js";
+import { validateUser } from "../middlewares/validation.js";
 
-// Обрабатываем запросs с роутом '/users'
+const usersRouter = express.Router();
+
+usersRouter.get("/me", checkAuth, sendMe);
 usersRouter.get("/users", findAllUsers, sendAllUsers);
 usersRouter.get("/users/:id", findUserById, sendUserById);
 usersRouter.post(
   "/users",
   findAllUsers,
+  validateUser,
   checkIsUserExists,
-  checkEmptyNameAndEmailAndPassword,
+  checkEmptyPassword,
+  checkEmptyNameAndEmail,
   checkAuth,
-  hashPassword,
+  conversionToHash,
   createUser,
   sendUserCreated
 );
+usersRouter.delete(
+  "/users/:id",
+  findUserById,
+  checkAuth,
+  deleteUser,
+  sendUserDeleted
+);
 usersRouter.put(
   "/users/:id",
+  findUserById,
   checkEmptyNameAndEmail,
   checkAuth,
   updateUser,
   sendUserUpdated
 );
-usersRouter.delete("/users/:id", checkAuth, deleteUser, sendUserDeleted);
 
-usersRouter.get("/me", checkAuth, sendMe);
-
-// Экспортируем роут для использования в приложении — app.js
-module.exports = usersRouter;
+export default usersRouter;

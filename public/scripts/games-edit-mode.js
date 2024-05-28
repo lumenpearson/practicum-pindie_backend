@@ -5,7 +5,7 @@ import {
   createGameCategoryBlock,
   removeGameCategoryBlock,
   hideVotesBlock,
-  showVotesBlock
+  showVotesBlock,
 } from "./dom-creators.js";
 import { addPutGameListeners, removePutGameListeners } from "./requests.js";
 
@@ -15,7 +15,7 @@ export const currentState = {
   developer: "",
   link: "",
   image: "",
-  categories: []
+  categories: [],
 };
 export let gamesEditModeOn = false;
 
@@ -30,7 +30,7 @@ export const useGameState = () => {
   return { setCurrentState, setGamesEditModeOn };
 };
 
-const useEditableElementsState = gameId => {
+const useEditableElementsState = (gameId) => {
   const targetElementsState = [
     {
       name: "title",
@@ -38,7 +38,7 @@ const useEditableElementsState = gameId => {
       canEditText: true,
       canSetTransparency: true,
       canSetVisibility: false,
-      canSetSource: false
+      canSetSource: false,
     },
     {
       name: "description",
@@ -46,7 +46,7 @@ const useEditableElementsState = gameId => {
       canEditText: true,
       canSetTransparency: true,
       canSetVisibility: false,
-      canSetSource: false
+      canSetSource: false,
     },
     {
       name: "developer",
@@ -54,7 +54,7 @@ const useEditableElementsState = gameId => {
       canEditText: true,
       canSetTransparency: true,
       canSetVisibility: false,
-      canSetSource: false
+      canSetSource: false,
     },
     {
       name: "link",
@@ -62,7 +62,7 @@ const useEditableElementsState = gameId => {
       canEditText: true,
       canSetTransparency: true,
       canSetVisibility: false,
-      canSetSource: true
+      canSetSource: true,
     },
     {
       name: "image",
@@ -70,31 +70,31 @@ const useEditableElementsState = gameId => {
       canEditText: false,
       canSetTransparency: true,
       canSetVisibility: false,
-      canSetSource: true
+      canSetSource: true,
     },
     {
       name: "categoriesForm",
       element: [
-        ...document.querySelectorAll(`#game-${gameId} .game-categories-form`)
-      ],
-      canEditText: false,
-      canSetTransparency: false,
-      canSetVisibility: true
-    },
-    {
-      name: "imageInput",
-      element: [
-        ...document.querySelectorAll(`#game-${gameId} .image-url-input`)
+        ...document.querySelectorAll(`#game-${gameId} .game-categories-form`),
       ],
       canEditText: false,
       canSetTransparency: false,
       canSetVisibility: true,
-      canSetSource: false
-    }
+    },
+    {
+      name: "imageInput",
+      element: [
+        ...document.querySelectorAll(`#game-${gameId} .image-url-input`),
+      ],
+      canEditText: false,
+      canSetTransparency: false,
+      canSetVisibility: true,
+      canSetSource: false,
+    },
   ];
 
   function setTransparency(state) {
-    targetElementsState.forEach(item => {
+    targetElementsState.forEach((item) => {
       item.canSetTransparency &&
         (item.element.style.opacity = state ? ".5" : "1");
     });
@@ -102,16 +102,16 @@ const useEditableElementsState = gameId => {
   }
 
   function setCanEditText(state) {
-    targetElementsState.forEach(item => {
+    targetElementsState.forEach((item) => {
       item.canEditText && item.element.setAttribute("contenteditable", state);
     });
     return targetElementsState;
   }
 
   function setVisibility(state) {
-    targetElementsState.forEach(item => {
+    targetElementsState.forEach((item) => {
       item.canSetVisibility &&
-        item.element.forEach(element => {
+        item.element.forEach((element) => {
           element.style.display = state ? "block" : "none";
         });
     });
@@ -121,21 +121,23 @@ const useEditableElementsState = gameId => {
     targetElementsState,
     setTransparency,
     setCanEditText,
-    setVisibility
+    setVisibility,
   };
 };
 
-export const fillStoreWithPageData = gameId => {
+export const fillStoreWithPageData = (gameId) => {
   const { setCurrentState } = useGameState();
   let { targetElementsState } = useEditableElementsState(gameId);
   // наполнить стор из аттрибутов элементов
   const allCategories = [
-    ...document.querySelectorAll(`#game-${gameId} .categories li`)
+    ...document.querySelectorAll(`#game-${gameId} .categories li`),
   ];
-  const categoriesIdArray = allCategories.map(category => category.dataset.id);
+  const categoriesIdArray = allCategories.map(
+    (category) => category.dataset.id
+  );
   setCurrentState("categories", categoriesIdArray);
 
-  targetElementsState.forEach(item => {
+  targetElementsState.forEach((item) => {
     if (item.canEditText) {
       setCurrentState(item.name, item.element.textContent);
     }
@@ -145,7 +147,7 @@ export const fillStoreWithPageData = gameId => {
 
     // показывает новые элементы
     if (item.canSetVisibility) {
-      item.element.forEach(element => {
+      item.element.forEach((element) => {
         element.removeAttribute("style");
         element.focus();
       });
@@ -153,11 +155,11 @@ export const fillStoreWithPageData = gameId => {
   });
 };
 
-export const fillStoreWithEditableElements = gameId => {
+export const fillStoreWithEditableElements = (gameId) => {
   const { setCurrentState } = useGameState();
   let { targetElementsState } = useEditableElementsState(gameId);
   // наполнить стор из аттрибутов элементов
-  targetElementsState.forEach(item => {
+  targetElementsState.forEach((item) => {
     if (item.canEditText) {
       setCurrentState(item.name, item.element.textContent);
     }
@@ -169,9 +171,11 @@ export const fillStoreWithEditableElements = gameId => {
     }
     if (item.name === "categoriesForm") {
       const checkboxes = [...item.element[0].querySelectorAll("input")];
-      const checkedCategories = checkboxes.filter(checkbox => checkbox.checked);
+      const checkedCategories = checkboxes.filter(
+        (checkbox) => checkbox.checked
+      );
       const categoriesIdArray = checkedCategories.map(
-        category => category.value
+        (category) => category.value
       );
       setCurrentState("categories", categoriesIdArray);
     }
@@ -193,7 +197,7 @@ const setButtonStyle = (gameId, state) => {
 const blurElements = (gameId, state) => {
   const gameCards = [...document.querySelectorAll(".game-card")];
   if (state) {
-    gameCards.forEach(card => {
+    gameCards.forEach((card) => {
       if (card.id !== `game-${gameId}`) {
         card.style.filter = "blur(10px)";
         card.style.pointerEvents = "none";
@@ -207,7 +211,7 @@ const blurElements = (gameId, state) => {
       }
     });
   } else {
-    gameCards.forEach(card => {
+    gameCards.forEach((card) => {
       if (card.id !== `game-${gameId}`) {
         card.style.filter = "none";
         card.style.pointerEvents = "initial";
@@ -244,11 +248,8 @@ const setCloseButtonStyleAndListeners = (gameId, state) => {
 
 export function changeGameEditMode(gameId, state) {
   const { setGamesEditModeOn } = useGameState();
-  let {
-    setTransparency,
-    setCanEditText,
-    setVisibility
-  } = useEditableElementsState(gameId);
+  let { setTransparency, setCanEditText, setVisibility } =
+    useEditableElementsState(gameId);
 
   if (state) {
     setButtonStyle(gameId, state);
@@ -276,12 +277,12 @@ export function changeGameEditMode(gameId, state) {
   return { currentState, gamesEditModeOn };
 }
 
-const turnOnEditModeHandler = function(e) {
+const turnOnEditModeHandler = function (e) {
   let gameId = e.target.dataset.id;
   fillStoreWithPageData(gameId);
   changeGameEditMode(gameId, true);
   const gameButtons = [...document.querySelectorAll(".edit-game-button")];
-  gameButtons.forEach(button => {
+  gameButtons.forEach((button) => {
     button.removeEventListener("click", turnOnEditModeHandler);
   });
   addPutGameListeners();
@@ -289,7 +290,7 @@ const turnOnEditModeHandler = function(e) {
 
 export const addGamesEditModeListeners = () => {
   const gameButtons = [...document.querySelectorAll(".edit-game-button")];
-  gameButtons.forEach(button => {
+  gameButtons.forEach((button) => {
     button.addEventListener("click", turnOnEditModeHandler);
   });
 };

@@ -1,160 +1,133 @@
-// Файл middlewares/games.js
+import game from "../models/game.js";
 
-// Импортируем модель
-const games = require("../models/game");
-
-const findAllGames = async (req, res, next) => {
-  // Поиск всех игр в проекте по заданной категории
-  if (req.query["categories.name"]) {
-    req.gamesArray = await games.findGameByCategory(
-      req.query["categories.name"]
+const findAllGames = async (request, response, next) => {
+  if (request.query["categories.name"]) {
+    request.gamesArray = await game.findGameByCategory(
+      request.query["categories.name"]
     );
     next();
     return;
   }
-  req.gamesArray = await games.find({}).populate("categories").populate({
+  request.gamesArray = await game.find({}).populate("categories").populate({
     path: "users",
     select: "-password",
   });
   next();
 };
-const createGame = async (req, res, next) => {
-  console.log("POST /games");
+
+const createGame = async (request, response, next) => {
   try {
-    console.log(req.body);
-    req.game = await games.create(req.body);
+    request.game = await game.create(request.body);
     next();
   } catch (error) {
-    res.setHeader("Content-Type", "application/json");
-    res.status(400).send(JSON.stringify({ message: "Ошибка создания игры" }));
+    response.status(400).send("Error creating game");
   }
+  next();
 };
-const findGameById = async (req, res, next) => {
+
+const findGameById = async (request, response, next) => {
   try {
-    req.game = await games
-      .findById(req.params.id)
-      .populate("categories")
-      .populate({
-        path: "users",
-        select: "-password",
-      });
+    request.game = await game.findById(request.params.id);
     next();
   } catch (error) {
-    res.setHeader("Content-Type", "application/json");
-    res.status(404).send(JSON.stringify({ message: "Игра не найдена" }));
+    response.status(404).send({ message: "Game not found" });
   }
 };
-const updateGame = async (req, res, next) => {
+
+const deleteGame = async (request, response, next) => {
   try {
-    // В метод передаём id из параметров запроса и объект с новыми свойствами
-    req.game = await games.findByIdAndUpdate(req.params.id, req.body);
+    request.game = await game.findByIdAndDelete(request.params.id);
     next();
   } catch (error) {
-    res.setHeader("Content-Type", "application/json");
-    res.status(400).send(JSON.stringify({ message: "Ошибка обновления игры" }));
+    response.status(400).send("Error deleting game");
   }
+  next();
 };
-const deleteGame = async (req, res, next) => {
+
+const updateGame = async (request, response, next) => {
   try {
-    // Методом findByIdAndDelete по id находим и удаляем документ из базы данных
-    req.game = await games.findByIdAndDelete(req.params.id);
+    request.game = await game.findByIdAndUpdate(
+      request.params.id,
+      request.body
+    );
     next();
   } catch (error) {
-    res.setHeader("Content-Type", "application/json");
-    res.status(400).send(JSON.stringify({ message: "Ошибка удаления игры" }));
+    response.status(400).send({ message: "Error update game" });
   }
 };
-const checkEmptyFields = async (req, res, next) => {
-  if (req.isVoteRequest) {
+
+const checkEmptyFields = async (request, response, next) => {
+  if (request.isVoteRequest) {
     next();
     return;
   }
   if (
-    !req.body.title ||
-    !req.body.description ||
-    !req.body.image ||
-    !req.body.link ||
-    !req.body.developer
+    !request.body.title ||
+    !request.body.description ||
+    !request.body.image ||
+    !request.body.link ||
+    !request.body.developer
   ) {
-    // Если какое-то из полей отсутствует, то не будем обрабатывать запрос дальше,
-    // а ответим кодом 400 — данные неверны.
-    res.setHeader("Content-Type", "application/json");
-    res.status(400).send(JSON.stringify({ message: "Заполни все поля" }));
+    response.status(400).send({ message: "Fill all blank" });
   } else {
-    // Если всё в порядке, то передадим управление следующим миддлварам
     next();
   }
 };
-const checkIfCategoriesAvaliable = async (req, res, next) => {
-  if (req.isVoteRequest) {
+
+const checkIfCategoriesAvaliable = async (request, response, next) => {
+  if (request.isVoteRequest) {
     next();
     return;
   }
-  // Проверяем наличие жанра у игры
-  if (!req.body.categories || req.body.categories.length === 0) {
-    res.setHeader("Content-Type", "application/json");
-    res
+  if (!request.body.categories || request.body.categories.length === 0) {
+    response.headers = { "Content-Type": "application/json" };
+    response.status(400).send({ message: "Pick at least one category" });
+  } else {
+    next();
+  }
+};
+
+const checkIfUsersAreSafe = async (request, response, next) => {
+  if (!request.body.users) {
+    next();
+    return;
+  }
+  if (request.body.users.length - 1 === request.game.users.length) {
+    next();
+    return;
+  } else {
+    response
       .status(400)
-      .send(JSON.stringify({ message: "Выбери хотя бы одну категорию" }));
-  } else {
-    next();
+      .send("You cannot delete users or add more than one user");
   }
 };
-const checkIfUsersAreSafe = async (req, res, next) => {
-  // Проверим, есть ли users в теле запроса
-  if (!req.body.users) {
-    next();
-    return;
-  }
-  // Cверим, на сколько изменился массив пользователей в запросе
-  // с актуальным значением пользователей в объекте game
-  // Если больше чем на единицу, вернём статус ошибки 400 с сообщением
-  if (req.body.users.length - 1 === req.game.users.length) {
-    next();
-    return;
-  } else {
-    res.setHeader("Content-Type", "application/json");
-    res.status(400).send(
-      JSON.stringify({
-        message:
-          "Нельзя удалять пользователей или добавлять больше одного пользователя",
-      })
-    );
-  }
-};
-const checkIsGameExists = async (req, res, next) => {
-  // Среди существующих в базе игр мы найдем игру с тем же именем,
-  // с которым хотим создать новую игру
-  const isInArray = req.gamesArray.find((game) => {
-    return req.body.title === game.title;
+
+const checkIsGameExists = async (request, response, next) => {
+  const isInArray = request.gamesArray.find((game) => {
+    return request.body.title === game.title;
   });
-  // Если нашли совпадение, то отвечаем кодом 400 и сообщением
   if (isInArray) {
-    res.setHeader("Content-Type", "application/json");
-    res.status(400).send(
-      JSON.stringify({
-        message: "Игра с таким названием уже существует",
-      })
-    );
+    response
+      .status(400)
+      .send({ message: "A game with that name already exists" });
   } else {
-    // Если игра, которую хотим создать, действительно новая, то передаём управление дальше
     next();
   }
 };
-const checkIsVoteRequest = async (req, res, next) => {
-  // Если в запросе присылают только поле users
-  if (Object.keys(req.body).length === 1 && req.body.users) {
-    req.isVoteRequest = true;
+
+const checkIsVoteRequest = async (request, response, next) => {
+  if (Object.keys(request.body).length === 1 && request.body.users) {
+    request.isVoteRequest = true;
   }
   next();
 };
-// Экспортируем функции
-module.exports = {
+
+export {
   findAllGames,
   createGame,
   findGameById,
-  updateGame,
   deleteGame,
+  updateGame,
   checkEmptyFields,
   checkIfCategoriesAvaliable,
   checkIfUsersAreSafe,

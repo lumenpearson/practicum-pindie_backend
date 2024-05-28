@@ -2,7 +2,7 @@ import { appendGameForm, appendCategoryForm, appendUserForm } from "./forms.js";
 import {
   removeCategoryFormListeners,
   removeUserFormListeners,
-  removeGameFormListeners
+  removeGameFormListeners,
 } from "./requests.js";
 const buttons = [...document.querySelectorAll(".call-dialog-button")];
 const dialog = document.querySelector(".form-dialog");
@@ -26,7 +26,7 @@ export const closeDialog = () => {
   dialogOpened = false;
 };
 
-const formSwitch = caseName => {
+const formSwitch = (caseName) => {
   switch (caseName) {
     case "game":
       appendGameForm();
@@ -42,14 +42,14 @@ const formSwitch = caseName => {
   }
 };
 
-buttons.forEach(button => {
+buttons.forEach((button) => {
   button.addEventListener("click", () => {
     openDialog();
     button.classList.contains("add-game-button")
       ? formSwitch("game")
       : button.classList.contains("add-category-button")
-      ? formSwitch("category")
-      : formSwitch("user");
+        ? formSwitch("category")
+        : formSwitch("user");
   });
 });
 

@@ -1,18 +1,23 @@
-const users = require("../models/user.js");
-const jwt = require("jsonwebtoken");
-const path = require("path");
+import jwt from "jsonwebtoken";
+import User from "../models/user.js";
+import bcrypt from "bcryptjs";
+import { fileURLToPath } from "url";
+import path from "path";
 
-const login = (req, res) => {
-  const { email, password } = req.body;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-  users
-    .findUserByCredentials(email, password)
+const login = (request, response) => {
+  const { email, password } = request.body;
+  User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, "some-secret-key", {
-        expiresIn: 3600,
+      const token = jwt.sign({ _id: user._id }, "i-am-so-tired", {
+        expiresIn: "7d",
       });
-
-      res.status(200).send({
+      return { user, token };
+    })
+    .then(({ user, token }) => {
+      response.status(200).send({
         _id: user._id,
         username: user.username,
         email: user.email,
@@ -20,25 +25,25 @@ const login = (req, res) => {
       });
     })
     .catch((error) => {
-      res.status(401).send({ message: error.message });
+      response.status(401).send({ message: error.message });
     });
 };
 
-const sendIndex = (req, res) => {
-  if (req.cookies.jwt) {
+const sendIndex = (request, response) => {
+  if (request.cookies.jwt) {
     try {
-      jwt.verify(req.cookies.jwt, "some-secret-key");
-      return res.redirect("/admin/dashboard");
-    } catch (err) {
-      res.sendFile(path.join(__dirname, "../public/index.html"));
+      jwt.verify(request.cookies.jwt, "i-am-so-tired");
+      return response.redirect("/admin/dashboard");
+    } catch (error) {
+      return response.sendFile(path.join(__dirname, "../public/index.html"));
     }
+  } else {
+    return response.sendFile(path.join(__dirname, "../public/index.html"));
   }
-  res.sendFile(path.join(__dirname, "../public/index.html"));
 };
 
-const sendDashboard = (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/admin/dashboard.html"));
+const sendDashBoard = (request, response) => {
+  response.sendFile(path.join(__dirname, "../public/admin/dashboard.html"));
 };
 
-// Не забываем экспортировать функцию
-module.exports = { login, sendIndex, sendDashboard };
+export { login, sendIndex, sendDashBoard };

@@ -1,10 +1,12 @@
-// routes/main.js
-const mainRoute = require("express").Router();
+import express from "express";
+import { promises as fs } from "fs";
 
-mainRoute.get("/", (req, res) => {
+const mainRoute = express.Router();
+
+mainRoute.get("/", (request, response) => {
   fs.readFile("./public/index.html", "utf-8").then((data) => {
-    res.header("Content-Type", "text/html").send(data);
+    response.header("Content-Type", "text/html").send(data);
   });
 });
 
-module.exports = mainRoute;
+export default mainRoute;

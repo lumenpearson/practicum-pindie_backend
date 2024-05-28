@@ -2,7 +2,7 @@ import { addPutUserListeners, removePutUserListeners } from "./requests.js";
 
 export const userCurrentState = {
   username: "",
-  email: ""
+  email: "",
 };
 
 export let usersEditModeOn = false;
@@ -17,63 +17,67 @@ const useUserState = () => {
   return { setCurrentUserState, setUsersEditModeOn };
 };
 
-const useEditableUserElementsState = userId => {
+const useEditableUserElementsState = (userId) => {
   const targetElementsState = [
     {
       name: "username",
       element: document.querySelector(`#user-${userId} .name`),
       canEditText: true,
       canSetTransparency: true,
-      canSetVisibility: false
+      canSetVisibility: false,
     },
     {
       name: "email",
       element: document.querySelector(`#user-${userId} .email`),
       canEditText: true,
       canSetTransparency: true,
-      canSetVisibility: false
-    }
+      canSetVisibility: false,
+    },
   ];
   return targetElementsState;
 };
 
-export const fillUsersStateFromPage = userId => {
+export const fillUsersStateFromPage = (userId) => {
   const targetElementsState = useEditableUserElementsState(userId);
   const { setCurrentUserState } = useUserState();
   setCurrentUserState(
     "username",
-    targetElementsState.find(item => item.name === "username").element
+    targetElementsState.find((item) => item.name === "username").element
       .textContent
   );
   setCurrentUserState(
     "email",
-    targetElementsState.find(item => item.name === "email").element.textContent
+    targetElementsState.find((item) => item.name === "email").element
+      .textContent
   );
 };
 
-export const fillUsersStateFromForm = userId => {
+export const fillUsersStateFromForm = (userId) => {
   const targetElementsState = useEditableUserElementsState(userId);
   const { setCurrentUserState } = useUserState();
   setCurrentUserState(
     "username",
-    targetElementsState.find(item => item.name === "username").element
+    targetElementsState.find((item) => item.name === "username").element
       .textContent
   );
   setCurrentUserState(
     "email",
-    targetElementsState.find(item => item.name === "email").element.textContent
+    targetElementsState.find((item) => item.name === "email").element
+      .textContent
   );
 };
 
 const changeTargetElementsStyle = (userId, targetElementsState, state) => {
   if (state) {
-    targetElementsState.forEach(element => {
+    targetElementsState.forEach((element) => {
       element.element.contentEditable = element.canEditText;
       element.element.style.opacity = element.canSetTransparency ? ".5" : "1";
     });
-    targetElementsState.find(item => item.name === "username").element.focus();
+    targetElementsState
+      .find((item) => item.name === "username")
+      .element.focus();
     const usersCards = [...document.querySelectorAll(".user-list-item")];
-    usersCards.forEach(card => {
+    usersCards.forEach((card) => {
       if (card.id !== `user-${userId}`) {
         card.style.filter = "blur(10px)";
         card.style.pointerEvents = "none";
@@ -87,12 +91,12 @@ const changeTargetElementsStyle = (userId, targetElementsState, state) => {
       }
     });
   } else {
-    targetElementsState.forEach(element => {
+    targetElementsState.forEach((element) => {
       element.element.contentEditable = !element.canEditText;
       element.element.style.opacity = !element.canSetTransparency ? ".5" : "1";
     });
     const usersCards = [...document.querySelectorAll(".user-list-item")];
-    usersCards.forEach(card => {
+    usersCards.forEach((card) => {
       card.style.filter = "none";
       card.style.pointerEvents = "auto";
       card.style.transform = "scale(1)";
@@ -166,12 +170,12 @@ export const changeUserEditMode = (userId, state) => {
   }
 };
 
-const handleButtonClick = event => {
+const handleButtonClick = (event) => {
   const userId = event.currentTarget.dataset.id;
   fillUsersStateFromPage(userId);
   changeUserEditMode(userId, true);
   const userEditButton = document.querySelectorAll(".edit-user-button");
-  userEditButton.forEach(button => {
+  userEditButton.forEach((button) => {
     button.removeEventListener("click", handleButtonClick);
   });
   addPutUserListeners();
@@ -179,7 +183,7 @@ const handleButtonClick = event => {
 
 export const addUsersEditModeListeners = () => {
   const userEditButton = document.querySelectorAll(".edit-user-button");
-  userEditButton.forEach(button => {
+  userEditButton.forEach((button) => {
     button.addEventListener("click", handleButtonClick);
   });
 };
