@@ -6,6 +6,6 @@ export const ALLOWED_CORS = [
   "https://practicum.yandex.ru",
   "https://students-projects.ru",
   `localhost:${PORT}`,
-  "https://notartya.nomoredomainswork.ru",
+  "https://lumens-pindie.nomoredomainswork.ru",
   "http://localhost:3000",
 ];
